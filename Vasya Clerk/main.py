@@ -16,19 +16,32 @@ tickets([25, 25, 50, 50, 100]) # => NO. Vasya will not have the right bills to g
 """
 
 def tickets(people):
-    if people[0] != 25:
-        return "NO"
 
-    the_map = {
-        25 : 25,
-        50 : -25,
-        100 : -75
+    pop_map = {
+        25 : 0,
+        50 : 25,
+        100 : 50,
     }
-    bal = 0
+    
+    l = []
     for i in people:
-        bal = bal + the_map[i]
-        if bal < 0:
+        l.append(i)
+        if i == 50 and 25 not in l:
             return "NO"
+        elif (i == 100 and 25 not in l) or (i == 100 and 50 not in l):
+            if l.count(25) >= 3:
+                l.remove(25)
+                l.remove(25)
+                l.remove(25)
+                continue
+            return "NO"
+        elif i == 25:
+            continue
+        elif i == 100:
+            l.remove(25)
+            l.remove(pop_map[i])
+        else:
+            l.remove(pop_map[i])
     return "YES"
 
 if __name__ == "__main__":
